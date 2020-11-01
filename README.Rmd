@@ -32,7 +32,7 @@ devtools::install_github("felixlobert/rcodede")
 
 This is a basic example which shows you how to query available Sentinel-1 scenes for a given area of interest and multiple filter criteria:
 
-```{r example, echo = FALSE}
+```{r example, eval = FALSE}
 library(rcodede)
 
 # Create example AOI
