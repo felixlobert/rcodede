@@ -1,0 +1,24 @@
+Package: rcodede
+Title: Fuctions to use the CODE-DE satellite data repository
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Felix",
+           family = "Lobert",
+           role = c("aut", "cre"),
+           email = "felix.lobert@thuenen.de",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: The package contains functions for the easy use of the CODE-DE satellite data repository like a query builder for the EO Finder API and and basic processing steps.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+    sf,
+    dplyr,
+    httr,
+    jsonlite,
+    tidyr,
+    magrittr
+Suggests:
+    mapview
