@@ -47,11 +47,14 @@ estimateCoherence(
 
 \item{execute}{logical if command for esa SNAP gpt shall be executed.}
 }
+\value{
+
+}
 \description{
 Coherence estimation for two corresponding Sentinel-1 SLC scenes
 }
 \examples{
-#' # example AOI
+# example AOI
 aoi <- c(10.441054, 52.286959) \%>\%
   sf::st_point() \%>\%
   sf::st_sfc(crs = 4326)
@@ -71,8 +74,9 @@ estimateCoherence(
   master = scenes$productPath[1],
   slave = scenes$productPath[2],
   outputDirectory = getwd(),
-  fileName = "/test.tif",
+  fileName = "test.tif",
   aoi = aoi,
+  aoiBuffer = 100,
   polarisation = "VV,VH",
   swath = "IW1",
   firstBurst = 1,

@@ -16,8 +16,11 @@
 #' @param maxMemory Amount of memory to be used in GB.
 #' @param execute logical if command for esa SNAP gpt shall be executed.
 #'
+#' @return
+#' @export
+#'
 #' @examples
-#' #' # example AOI
+#' # example AOI
 #' aoi <- c(10.441054, 52.286959) %>%
 #'   sf::st_point() %>%
 #'   sf::st_sfc(crs = 4326)
@@ -37,8 +40,9 @@
 #'   master = scenes$productPath[1],
 #'   slave = scenes$productPath[2],
 #'   outputDirectory = getwd(),
-#'   fileName = "/test.tif",
+#'   fileName = "test.tif",
 #'   aoi = aoi,
+#'   aoiBuffer = 100,
 #'   polarisation = "VV,VH",
 #'   swath = "IW1",
 #'   firstBurst = 1,
@@ -67,7 +71,7 @@ estimateCoherence <-
     subset <- aoi %>%
       sf::st_transform(32632) %>%
       sf::st_buffer(aoiBuffer) %>%
-      sf::st_transform(4326)%>%
+      sf::st_transform(4326) %>%
       sf::st_bbox() %>%
       sf::st_as_sfc() %>%
       sf::st_as_text(digits=15)
