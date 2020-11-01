@@ -27,21 +27,4 @@ This is a basic example which shows you how to query available
 Sentinel-1 scenes for a given area of interest and multiple filter
 criteria:
 
-``` r
-library(rcodede)
-# Create example AOI
-aoi <- c(10.441054, 52.286959) %>%
-  sf::st_point() %>%
-  sf::st_sfc(crs = 4326)
-
-# Query available scenes for the buffered AOI and given criteria
-scenes <-
-  getScenes(
-    aoi = aoi,
-    bufferDist = 100,
-    startDate = "2019-01-01",
-    endDate = "2019-01-31",
-    productType = "SLC"
-  )
-#> although coordinates are longitude/latitude, st_contains_properly assumes that they are planar
-```
+    #> although coordinates are longitude/latitude, st_contains_properly assumes that they are planar
