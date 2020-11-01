@@ -16,35 +16,18 @@
 #' @export
 #'
 #' @examples
-#' # points example polygon
-#' pts <-
-#'   matrix(
-#'     data = c(
-#'       10.441070,
-#'       10.441070,
-#'       10.441077,
-#'       10.441077,
-#'       10.441070,
-#'       52.286956,
-#'       52.286965,
-#'       52.286965,
-#'       52.286956,
-#'       52.286956
-#'     ),
-#'     nrow = 5
-#'   )
-#'
-#' # create aoi from points
-#' aoi <- sf::st_polygon(x = list(pts)) %>%
-#'   sf::st_sfc() %>%
-#'   sf::`st_crs<-`(4326)
+#' # example AOI
+#' aoi <- c(10.441054, 52.286959) %>%
+#'   sf::st_point() %>%
+#'   sf::st_sfc(crs = 4326)
 #'
 #' # scenes for aoi and given criteria
 #' scenes <-
 #'   getScenes(
 #'     aoi = aoi,
+#'     bufferDist = 100,
 #'     startDate = "2019-01-01",
-#'     endDate = "2019-12-31",
+#'     endDate = "2019-01-31",
 #'     productType = "SLC"
 #'   )
 getScenes <-
