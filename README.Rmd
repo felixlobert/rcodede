@@ -18,37 +18,37 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of rcodede is to ...
+The goal of rcodede is to simpify the usage of the CODE-DE satellite data repository with R and provide functions for basic processing steps with the esa SNAP Graph Processing Tool.
 
 ## Installation
 
-You can install thethe development version from [GitHub](https://github.com/) with:
+You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
+install.packages("devtools")
 devtools::install_github("felixlobert/rcodede")
 ```
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to query available Sentinel-1 scenes for a given area of interest and multiple filter criteria:
 
 ```{r example}
 library(rcodede)
-## basic example code
+# Create example AOI
+aoi <- c(10.441054, 52.286959) %>%
+  sf::st_point() %>%
+  sf::st_sfc(crs = 4326)
+
+# Query available scenes for the buffered AOI and given criteria
+scenes <-
+  getScenes(
+    aoi = aoi,
+    bufferDist = 100,
+    startDate = "2019-01-01",
+    endDate = "2019-01-31",
+    productType = "SLC"
+  )
+
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!

@@ -7,47 +7,41 @@
 
 <!-- badges: end -->
 
-The goal of rcodede is to …
+The goal of rcodede is to simpify the usage of the CODE-DE satellite
+data repository with R and provide functions for basic processing steps
+with the esa SNAP Graph Processing Tool.
 
 ## Installation
 
-You can install thethe development version from
+You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
+install.packages("devtools")
 devtools::install_github("felixlobert/rcodede")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to query available
+Sentinel-1 scenes for a given area of interest and multiple filter
+criteria:
 
 ``` r
 library(rcodede)
-## basic example code
+# Create example AOI
+aoi <- c(10.441054, 52.286959) %>%
+  sf::st_point() %>%
+  sf::st_sfc(crs = 4326)
+
+# Query available scenes for the buffered AOI and given criteria
+scenes <-
+  getScenes(
+    aoi = aoi,
+    bufferDist = 100,
+    startDate = "2019-01-01",
+    endDate = "2019-01-31",
+    productType = "SLC"
+  )
+#> although coordinates are longitude/latitude, st_contains_properly assumes that they are planar
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
