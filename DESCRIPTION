@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "felix.lobert@thuenen.de",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: The package contains functions for the easy use of the CODE-DE satellite data repository like a query builder for the EO Finder API and and basic processing steps.
+Description: The package contains functions for the easy use of the CODE-DE satellite data repository like a query builder for the EO Finder API and and basic processing steps for satellite imagery.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
