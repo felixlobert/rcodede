@@ -14,6 +14,38 @@
 #' @param aoiBuffer Buffer size in metres for AOI.
 #' @param numCores Number of CPUs to be used in the process.
 #' @param maxMemory Amount of memory to be used in GB.
+#' @param execute logical if command for esa SNAP gpt shall be executed.
+#'
+#' @examples
+#' #' # example AOI
+#' aoi <- c(10.441054, 52.286959) %>%
+#'   sf::st_point() %>%
+#'   sf::st_sfc(crs = 4326)
+#'
+#' # scenes for aoi and given criteria
+#' scenes <-
+#'   getScenes(
+#'     aoi = aoi,
+#'     bufferDist = 100,
+#'     startDate = "2019-01-01",
+#'     endDate = "2019-01-31",
+#'     productType = "SLC"
+#'   ) %>%
+#'   dplyr::filter(relativeOrbitNumber == 44)
+#'
+#' estimateCoherence(
+#'   master = scenes$productPath[1],
+#'   slave = scenes$productPath[2],
+#'   outputDirectory = getwd(),
+#'   fileName = "/test.tif",
+#'   aoi = aoi,
+#'   polarisation = "VV,VH",
+#'   swath = "IW1",
+#'   firstBurst = 1,
+#'   lastBurst = 1,
+#'   numCores = 8,
+#'   maxMemory=50,
+#'   execute = FALSE)
 estimateCoherence <-
   function(master,
            slave,
@@ -26,7 +58,8 @@ estimateCoherence <-
            aoi,
            aoiBuffer = 0,
            numCores,
-           maxMemory) {
+           maxMemory,
+           execute = FALSE) {
 
     graph <-
       system.file("extdata", "coherenceGraphOneSwath.xml", package = "rcodede")
@@ -54,6 +87,9 @@ estimateCoherence <-
     )
 
     cat(cmd)
+
+    if(execute==TRUE){
     system(cmd)
+      }
 
   }

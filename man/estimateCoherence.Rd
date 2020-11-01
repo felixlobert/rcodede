@@ -16,7 +16,8 @@ estimateCoherence(
   aoi,
   aoiBuffer = 0,
   numCores,
-  maxMemory
+  maxMemory,
+  execute = FALSE
 )
 }
 \arguments{
@@ -43,7 +44,40 @@ estimateCoherence(
 \item{numCores}{Number of CPUs to be used in the process.}
 
 \item{maxMemory}{Amount of memory to be used in GB.}
+
+\item{execute}{logical if command for esa SNAP gpt shall be executed.}
 }
 \description{
 Coherence estimation for two corresponding Sentinel-1 SLC scenes
+}
+\examples{
+#' # example AOI
+aoi <- c(10.441054, 52.286959) \%>\%
+  sf::st_point() \%>\%
+  sf::st_sfc(crs = 4326)
+
+# scenes for aoi and given criteria
+scenes <-
+  getScenes(
+    aoi = aoi,
+    bufferDist = 100,
+    startDate = "2019-01-01",
+    endDate = "2019-01-31",
+    productType = "SLC"
+  ) \%>\%
+  dplyr::filter(relativeOrbitNumber == 44)
+
+estimateCoherence(
+  master = scenes$productPath[1],
+  slave = scenes$productPath[2],
+  outputDirectory = getwd(),
+  fileName = "/test.tif",
+  aoi = aoi,
+  polarisation = "VV,VH",
+  swath = "IW1",
+  firstBurst = 1,
+  lastBurst = 1,
+  numCores = 8,
+  maxMemory=50,
+  execute = FALSE)
 }
