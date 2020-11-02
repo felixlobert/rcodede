@@ -90,7 +90,9 @@ estimateCoherence <-
         " -PfirstBurst=", firstBurst,
         " -PlastBurst=", lastBurst,
         " -q ", numCores,
-        " -J-Xms2G -J-Xmx", maxMemory, "G"
+        " -J-Xms2G",
+        " -J-Xmx", maxMemory, "G",
+        " -Dsnap.dataio.bigtiff.compression.type=LZW"
       )
     }
 
