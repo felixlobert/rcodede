@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
+This package is in the earliest stages of development and is in no way ready for use.
+
 The goal of rcodede is to simpify the usage of the CODE-DE satellite data repository with R and provide functions for basic processing steps with the esa SNAP Graph Processing Tool.
 
 ## Installation
@@ -28,11 +30,13 @@ You can install the development version from [GitHub](https://github.com/) with:
 install.packages("devtools")
 devtools::install_github("felixlobert/rcodede")
 ```
-## Example
+## Examples
 
-This is a basic example which shows you how to query available Sentinel-1 scenes for a given area of interest and multiple filter criteria:
+### Query available scenes
 
-```{r example, eval = FALSE}
+This is a basic example which shows you how to query available Sentinel-1 scenes for a given area of interest and multiple filter criteria. The function 'rcodede::getScenes' creates an HTTP-GET request for the CODE-DE EO Finder API and processes the results for an easy usage.
+
+```{r example, eval = TRUE, message = FALSE}
 library(rcodede)
 
 # Create example AOI
@@ -40,7 +44,7 @@ aoi <- c(10.441054, 52.286959) %>%
   sf::st_point() %>%
   sf::st_sfc(crs = 4326)
 
-# Query available scenes for the buffered AOI and given criteria
+# Query footprint and metadata of available scenes for the AOI and given criteria
 scenes <-
   getScenes(
     aoi = aoi,
@@ -49,7 +53,50 @@ scenes <-
     endDate = "2019-01-31",
     productType = "SLC"
   )
+```
 
+This table shows the 5 top entries of the resulting sf object:
+
+```{r echo = FALSE, results = 'asis', message=FALSE}
+knitr::kable(scenes[1:5,])
+```
+
+### Basic Processing
+
+If the CODE-DE satellite data repository is mounted to the used machine, processing steps can be directly executed to the queried scenes. 
+
+The next example shows the estimation of the interferometric coherence for a selected swath based on two subsequent Sentinel-1 scenes from the same relative orbit. The function 'rcodede::estimateCoherence' creates a command for the esa SNAP Graph Processing Tool that is executed in the terminal. A pre-built SNAP-Workflow delivered with the package is then applied to the selected scenes.
+
+```{r warning = F, message = FALSE, results = FALSE, error = FALSE, eval = TRUE}
+# filter for scenes from same orbit to ensure same acquisition geometry
+scenes.filtered <-
+  scenes %>% 
+  dplyr::filter(relativeOrbitNumber == 44)
+
+# create temporary dir
+outputDirectory <- tempdir()
+
+# estimate the coherence for the first two scenes in the sf object
+estimateCoherence(
+  master = scenes.filtered$productPath[1],
+  slave = scenes.filtered$productPath[2],
+  outputDirectory = outputDirectory,
+  fileName = "/coherence.tif",
+  polarisation = "VH",
+  swath = "IW1",
+  firstBurst = 1,
+  lastBurst = 1,
+  numCores = 8,
+  maxMemory = 48,
+  execute = TRUE)
+```
+
+The created coherence raster or stack can then be plotted or further processed:
+
+```{r message = FALSE, eval = TRUE}
+coherence <- raster::raster(paste0(outputDirectory,"/coherence.tif"))
+
+raster::plot(coherence, main = paste0("Estimated Coherence ", scenes.filtered$date[1]))
 ```
 
 
