@@ -10,6 +10,8 @@
 #' @param swath Swath to be processed. One of "IW1", "IW2", "IW3" or "all".
 #' @param firstBurst First burst index from the chosen swath. Between 1 and 9. Only relevant if swath != "all".
 #' @param lastBurst Last burst index. Has to be higher than or equal to first burst. Only relevant if swath != "all".
+#' @param aoi sf object for the area of interest.
+#' @param aoiBuffer Buffer around aoi in meters. Defaults to 0.
 #' @param numCores Number of CPUs to be used in the process.
 #' @param maxMemory Amount of memory to be used in GB.
 #' @param execute logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.
@@ -56,45 +58,100 @@ estimateCoherence <-
            swath = "IW1",
            firstBurst = 1,
            lastBurst = 9,
+           aoi = NULL,
+           aoiBuffer = 0,
            numCores,
            maxMemory,
            execute = FALSE,
            return = FALSE) {
 
-    if(swath == "all"){
 
-      graph <-
-        system.file("extdata", "coherenceGraphAllSwaths.xml", package = "rcodede")
 
-      cmd <- paste0(
-        "sudo gpt ", graph,
-        " -Pinput1=", master, "/manifest.safe",
-        " -Pinput2=", slave, "/manifest.safe",
-        " -Poutput=", outputDirectory, fileName,
-        " -Ppolarisation=", polarisation,
-        " -q ", numCores,
-        " -J-Xms2G",
-        " -J-Xmx", maxMemory, "G"
-      )
+    if(is.null(aoi)){
+
+      if(swath == "all"){
+
+        graph <-
+          system.file("extdata", "coherenceGraphAllSwaths.xml", package = "rcodede")
+
+        cmd <- paste0(
+          "sudo gpt ", graph,
+          " -Pinput1=", master, "/manifest.safe",
+          " -Pinput2=", slave, "/manifest.safe",
+          " -Poutput=", outputDirectory, fileName,
+          " -Ppolarisation=", polarisation,
+          " -q ", numCores,
+          " -J-Xms2G",
+          " -J-Xmx", maxMemory, "G"
+        )
+
+      } else{
+
+        graph <-
+          system.file("extdata", "coherenceGraphOneSwath.xml", package = "rcodede")
+
+        cmd <- paste0(
+          "sudo gpt ", graph,
+          " -Pinput1=", master, "/manifest.safe",
+          " -Pinput2=", slave, "/manifest.safe",
+          " -Poutput=", outputDirectory, fileName,
+          " -Pswath=", swath,
+          " -Ppolarisation=", polarisation,
+          " -PfirstBurst=", firstBurst,
+          " -PlastBurst=", lastBurst,
+          " -q ", numCores,
+          " -J-Xms2G",
+          " -J-Xmx", maxMemory, "G"
+        )
+      }
 
     } else{
 
-      graph <-
-        system.file("extdata", "coherenceGraphOneSwath.xml", package = "rcodede")
+      subset <- aoi %>%
+        st_transform(32632) %>%
+        st_buffer(aoiBuffer) %>%
+        st_transform(4326)%>%
+        st_bbox() %>%
+        st_as_sfc() %>%
+        st_as_text(digits=15)
 
-      cmd <- paste0(
-        "sudo gpt ", graph,
-        " -Pinput1=", master, "/manifest.safe",
-        " -Pinput2=", slave, "/manifest.safe",
-        " -Poutput=", outputDirectory, fileName,
-        " -Pswath=", swath,
-        " -Ppolarisation=", polarisation,
-        " -PfirstBurst=", firstBurst,
-        " -PlastBurst=", lastBurst,
-        " -q ", numCores,
-        " -J-Xms2G",
-        " -J-Xmx", maxMemory, "G"
-      )
+      if(swath == "all"){
+
+        graph <-
+          system.file("extdata", "coherenceGraphAllSwathsSubset.xml", package = "rcodede")
+
+        cmd <- paste0(
+          "sudo gpt ", graph,
+          " -Pinput1=", master, "/manifest.safe",
+          " -Pinput2=", slave, "/manifest.safe",
+          " -Poutput=", outputDirectory, fileName,
+          " -Ppolarisation=", polarisation,
+          " -Paoi=\"", subset,"\"",
+          " -q ", numCores,
+          " -J-Xms2G",
+          " -J-Xmx", maxMemory, "G"
+        )
+
+      } else{
+
+        graph <-
+          system.file("extdata", "coherenceGraphOneSwathSubset.xml", package = "rcodede")
+
+        cmd <- paste0(
+          "sudo gpt ", graph,
+          " -Pinput1=", master, "/manifest.safe",
+          " -Pinput2=", slave, "/manifest.safe",
+          " -Poutput=", outputDirectory, fileName,
+          " -Pswath=", swath,
+          " -Ppolarisation=", polarisation,
+          " -PfirstBurst=", firstBurst,
+          " -PlastBurst=", lastBurst,
+          " -Paoi=\"", subset,"\"",
+          " -q ", numCores,
+          " -J-Xms2G",
+          " -J-Xmx", maxMemory, "G"
+        )
+      }
     }
 
     if(execute==TRUE){

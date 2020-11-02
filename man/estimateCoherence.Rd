@@ -13,6 +13,8 @@ estimateCoherence(
   swath = "IW1",
   firstBurst = 1,
   lastBurst = 9,
+  aoi = NULL,
+  aoiBuffer = 0,
   numCores,
   maxMemory,
   execute = FALSE,
@@ -35,6 +37,10 @@ estimateCoherence(
 \item{firstBurst}{First burst index from the chosen swath. Between 1 and 9. Only relevant if swath != "all".}
 
 \item{lastBurst}{Last burst index. Has to be higher than or equal to first burst. Only relevant if swath != "all".}
+
+\item{aoi}{sf object for the area of interest.}
+
+\item{aoiBuffer}{Buffer around aoi in meters. Defaults to 0.}
 
 \item{numCores}{Number of CPUs to be used in the process.}
 
