@@ -285,8 +285,8 @@
       <externalDEMApplyEGM>true</externalDEMApplyEGM>
       <demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>
       <imgResamplingMethod>BILINEAR_INTERPOLATION</imgResamplingMethod>
-      <pixelSpacingInMeter>10</pixelSpacingInMeter>
-      <pixelSpacingInDegree>8.983152841195215E-5</pixelSpacingInDegree>
+      <pixelSpacingInMeter>30</pixelSpacingInMeter>
+      <pixelSpacingInDegree>0.0002694946</pixelSpacingInDegree>
       <mapProjection>AUTO:42001</mapProjection>
       <alignToStandardGrid>true</alignToStandardGrid>
       <standardGridOriginX>0.0</standardGridOriginX>
