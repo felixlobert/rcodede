@@ -6,7 +6,7 @@
 #' @param slave Slave scene.
 #' @param outputDirectory Directory for the output file.
 #' @param fileName Name of the output file.
-#' @param swath Swath to be processed. One of "IW1", "IW2" or "IW3".
+#' @param swath Swath to be processed. One of "IW1", "IW2", "IW3" or "all".
 #' @param polarisation Plarisations to be processed. One of "VH", "VV", or "VV,VH". Defaults to "VV,VH".
 #' @param firstBurst First burst from the chosen swath.
 #' @param lastBurst Last birst. Has to be higher or equal to first burst.
@@ -59,21 +59,36 @@ estimateCoherence <-
            maxMemory,
            execute = FALSE) {
 
-    graph <-
-      system.file("extdata", "coherenceGraphOneSwath.xml", package = "rcodede")
+    if(swath == "all"){
+      graph <-
+        system.file("extdata", "coherenceGraphAllSwaths.xml", package = "rcodede")
 
-    cmd <- paste0(
-      "sudo gpt ", graph,
-      " -Pinput1=", master, "/manifest.safe",
-      " -Pinput2=", slave, "/manifest.safe",
-      " -Poutput=", outputDirectory, fileName,
-      " -Pswath=", swath,
-      " -Ppolarisation=", polarisation,
-      " -PfirstBurst=", firstBurst,
-      " -PlastBurst=", lastBurst,
-      " -q ", numCores,
-      " -J-Xms2G -J-Xmx", maxMemory, "G"
-    )
+      cmd <- paste0(
+        "sudo gpt ", graph,
+        " -Pinput1=", master, "/manifest.safe",
+        " -Pinput2=", slave, "/manifest.safe",
+        " -Poutput=", outputDirectory, fileName,
+        " -q ", numCores,
+        " -J-Xms2G -J-Xmx", maxMemory, "G"
+      )
+
+    } else{
+      graph <-
+        system.file("extdata", "coherenceGraphOneSwath.xml", package = "rcodede")
+
+      cmd <- paste0(
+        "sudo gpt ", graph,
+        " -Pinput1=", master, "/manifest.safe",
+        " -Pinput2=", slave, "/manifest.safe",
+        " -Poutput=", outputDirectory, fileName,
+        " -Pswath=", swath,
+        " -Ppolarisation=", polarisation,
+        " -PfirstBurst=", firstBurst,
+        " -PlastBurst=", lastBurst,
+        " -q ", numCores,
+        " -J-Xms2G -J-Xmx", maxMemory, "G"
+      )
+    }
 
     if(execute==TRUE){
       system(cmd)
