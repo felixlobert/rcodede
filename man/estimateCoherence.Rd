@@ -13,8 +13,6 @@ estimateCoherence(
   polarisation = "VV,VH",
   firstBurst = 1,
   lastBurst = 9,
-  aoi,
-  aoiBuffer = 0,
   numCores,
   maxMemory,
   execute = FALSE
@@ -36,10 +34,6 @@ estimateCoherence(
 \item{firstBurst}{First burst from the chosen swath.}
 
 \item{lastBurst}{Last birst. Has to be higher or equal to first burst.}
-
-\item{aoi}{sf object with area of interest to subst the output.}
-
-\item{aoiBuffer}{Buffer size in metres for AOI.}
 
 \item{numCores}{Number of CPUs to be used in the process.}
 
@@ -75,8 +69,6 @@ estimateCoherence(
   slave = scenes$productPath[2],
   outputDirectory = getwd(),
   fileName = "test.tif",
-  aoi = aoi,
-  aoiBuffer = 100,
   polarisation = "VV,VH",
   swath = "IW1",
   firstBurst = 1,

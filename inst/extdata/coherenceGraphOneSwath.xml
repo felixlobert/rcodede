@@ -42,10 +42,10 @@
       <sourceProduct refid="Apply-Orbit-File"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
-      <subswath>IW1</subswath>
-      <selectedPolarisations>VV,VH</selectedPolarisations>
-      <firstBurstIndex>1</firstBurstIndex>
-      <lastBurstIndex>1</lastBurstIndex>
+      <subswath>$swath</subswath>
+      <selectedPolarisations>$polarisation</selectedPolarisations>
+      <firstBurstIndex>$firstBurst</firstBurstIndex>
+      <lastBurstIndex>$lastBurst</lastBurstIndex>
       <wktAoi/>
     </parameters>
   </node>
@@ -55,10 +55,10 @@
       <sourceProduct refid="Apply-Orbit-File(2)"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
-      <subswath>IW1</subswath>
-      <selectedPolarisations>VV,VH</selectedPolarisations>
-      <firstBurstIndex>1</firstBurstIndex>
-      <lastBurstIndex>1</lastBurstIndex>
+      <subswath>$swath</subswath>
+      <selectedPolarisations>$polarisation</selectedPolarisations>
+      <firstBurstIndex>$firstBurst</firstBurstIndex>
+      <lastBurstIndex>$lastBurst</lastBurstIndex>
       <wktAoi/>
     </parameters>
   </node>

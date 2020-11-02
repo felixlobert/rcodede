@@ -10,8 +10,6 @@
 #' @param polarisation Plarisations to be processed. One of "VH", "VV", or "VV,VH". Defaults to "VV,VH".
 #' @param firstBurst First burst from the chosen swath.
 #' @param lastBurst Last birst. Has to be higher or equal to first burst.
-#' @param aoi sf object with area of interest to subst the output.
-#' @param aoiBuffer Buffer size in metres for AOI.
 #' @param numCores Number of CPUs to be used in the process.
 #' @param maxMemory Amount of memory to be used in GB.
 #' @param execute logical if command for esa SNAP gpt shall be executed.
@@ -41,8 +39,6 @@
 #'   slave = scenes$productPath[2],
 #'   outputDirectory = getwd(),
 #'   fileName = "test.tif",
-#'   aoi = aoi,
-#'   aoiBuffer = 100,
 #'   polarisation = "VV,VH",
 #'   swath = "IW1",
 #'   firstBurst = 1,
@@ -59,22 +55,12 @@ estimateCoherence <-
            polarisation = "VV,VH",
            firstBurst = 1,
            lastBurst = 9,
-           aoi,
-           aoiBuffer = 0,
            numCores,
            maxMemory,
            execute = FALSE) {
 
     graph <-
       system.file("extdata", "coherenceGraphOneSwath.xml", package = "rcodede")
-
-    subset <- aoi %>%
-      sf::st_transform(32632) %>%
-      sf::st_buffer(aoiBuffer) %>%
-      sf::st_transform(4326) %>%
-      sf::st_bbox() %>%
-      sf::st_as_sfc() %>%
-      sf::st_as_text(digits=15)
 
     cmd <- paste0(
       "sudo gpt ", graph,
@@ -85,15 +71,11 @@ estimateCoherence <-
       " -Ppolarisation=", polarisation,
       " -PfirstBurst=", firstBurst,
       " -PlastBurst=", lastBurst,
-      " -Paoi=\"", subset, "\"",
       " -q ", numCores,
       " -J-Xms2G -J-Xmx", maxMemory, "G"
     )
 
-    cat(cmd)
-
     if(execute==TRUE){
     system(cmd)
-      }
-
+    }
   }
