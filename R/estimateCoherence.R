@@ -6,13 +6,14 @@
 #' @param slave Slave scene.
 #' @param outputDirectory Directory for the output file.
 #' @param fileName Name of the output file.
-#' @param swath Swath to be processed. One of "IW1", "IW2", "IW3" or "all".
 #' @param polarisation Plarisations to be processed. One of "VH", "VV", or "VV,VH". Defaults to "VV,VH".
-#' @param firstBurst First burst from the chosen swath.
-#' @param lastBurst Last birst. Has to be higher or equal to first burst.
+#' @param swath Swath to be processed. One of "IW1", "IW2", "IW3" or "all".
+#' @param firstBurst First burst index from the chosen swath. Between 1 and 9. Only relevant if swath != "all".
+#' @param lastBurst Last burst index. Has to be higher than or equal to first burst. Only relevant if swath != "all".
 #' @param numCores Number of CPUs to be used in the process.
 #' @param maxMemory Amount of memory to be used in GB.
-#' @param execute logical if command for esa SNAP gpt shall be executed.
+#' @param execute logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.
+#' @param return logical if processed raster or stack shall be returned.
 #'
 #' @return
 #' @export
@@ -51,15 +52,17 @@ estimateCoherence <-
            slave,
            outputDirectory,
            fileName,
-           swath = "IW1",
            polarisation = "VV,VH",
+           swath = "IW1",
            firstBurst = 1,
            lastBurst = 9,
            numCores,
            maxMemory,
-           execute = FALSE) {
+           execute = FALSE,
+           return = FALSE) {
 
     if(swath == "all"){
+
       graph <-
         system.file("extdata", "coherenceGraphAllSwaths.xml", package = "rcodede")
 
@@ -73,6 +76,7 @@ estimateCoherence <-
       )
 
     } else{
+
       graph <-
         system.file("extdata", "coherenceGraphOneSwath.xml", package = "rcodede")
 
@@ -94,5 +98,10 @@ estimateCoherence <-
       system(cmd)
     } else{
       cat(cmd)
+    }
+
+    if(return == TRUE){
+      raster::stack(paste0(outputDirectory, fileName)) %>%
+        return()
     }
   }

@@ -9,13 +9,14 @@ estimateCoherence(
   slave,
   outputDirectory,
   fileName,
-  swath = "IW1",
   polarisation = "VV,VH",
+  swath = "IW1",
   firstBurst = 1,
   lastBurst = 9,
   numCores,
   maxMemory,
-  execute = FALSE
+  execute = FALSE,
+  return = FALSE
 )
 }
 \arguments{
@@ -27,19 +28,21 @@ estimateCoherence(
 
 \item{fileName}{Name of the output file.}
 
-\item{swath}{Swath to be processed. One of "IW1", "IW2" or "IW3".}
-
 \item{polarisation}{Plarisations to be processed. One of "VH", "VV", or "VV,VH". Defaults to "VV,VH".}
 
-\item{firstBurst}{First burst from the chosen swath.}
+\item{swath}{Swath to be processed. One of "IW1", "IW2", "IW3" or "all".}
 
-\item{lastBurst}{Last birst. Has to be higher or equal to first burst.}
+\item{firstBurst}{First burst index from the chosen swath. Between 1 and 9. Only relevant if swath != "all".}
+
+\item{lastBurst}{Last burst index. Has to be higher than or equal to first burst. Only relevant if swath != "all".}
 
 \item{numCores}{Number of CPUs to be used in the process.}
 
 \item{maxMemory}{Amount of memory to be used in GB.}
 
-\item{execute}{logical if command for esa SNAP gpt shall be executed.}
+\item{execute}{logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.}
+
+\item{return}{logical if processed raster or stack shall be returned.}
 }
 \value{
 
