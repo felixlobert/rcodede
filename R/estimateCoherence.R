@@ -72,7 +72,9 @@ estimateCoherence <-
         " -Pinput2=", slave, "/manifest.safe",
         " -Poutput=", outputDirectory, fileName,
         " -q ", numCores,
-        " -J-Xms2G -J-Xmx", maxMemory, "G"
+        " -J-Xms2G",
+        " -J-Xmx", maxMemory, "G",
+        " -Dsnap.dataio.bigtiff.compression.type=LZW"
       )
 
     } else{
