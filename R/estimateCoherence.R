@@ -74,8 +74,7 @@ estimateCoherence <-
         " -Ppolarisation=", polarisation,
         " -q ", numCores,
         " -J-Xms2G",
-        " -J-Xmx", maxMemory, "G",
-        " -Dsnap.dataio.bigtiff.compression.type=LZW"
+        " -J-Xmx", maxMemory, "G"
       )
 
     } else{
@@ -94,8 +93,7 @@ estimateCoherence <-
         " -PlastBurst=", lastBurst,
         " -q ", numCores,
         " -J-Xms2G",
-        " -J-Xmx", maxMemory, "G",
-        " -Dsnap.dataio.bigtiff.compression.type=LZW"
+        " -J-Xmx", maxMemory, "G"
       )
     }
 
