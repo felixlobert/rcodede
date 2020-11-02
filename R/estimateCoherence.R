@@ -71,6 +71,7 @@ estimateCoherence <-
         " -Pinput1=", master, "/manifest.safe",
         " -Pinput2=", slave, "/manifest.safe",
         " -Poutput=", outputDirectory, fileName,
+        " -Ppolarisation=", polarisation,
         " -q ", numCores,
         " -J-Xms2G",
         " -J-Xmx", maxMemory, "G",

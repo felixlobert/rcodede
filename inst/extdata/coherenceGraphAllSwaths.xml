@@ -43,7 +43,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <subswath>IW1</subswath>
-      <selectedPolarisations>VV,VH</selectedPolarisations>
+      <selectedPolarisations>$polarisation</selectedPolarisations>
       <firstBurstIndex>1</firstBurstIndex>
       <lastBurstIndex>9999</lastBurstIndex>
       <wktAoi/>
@@ -56,7 +56,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <subswath>IW1</subswath>
-      <selectedPolarisations>VV,VH</selectedPolarisations>
+      <selectedPolarisations>$polarisation</selectedPolarisations>
       <firstBurstIndex>1</firstBurstIndex>
       <lastBurstIndex>9999</lastBurstIndex>
       <wktAoi/>
@@ -87,7 +87,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <subswath>IW2</subswath>
-      <selectedPolarisations>VV,VH</selectedPolarisations>
+      <selectedPolarisations>$polarisation</selectedPolarisations>
       <firstBurstIndex>1</firstBurstIndex>
       <lastBurstIndex>9999</lastBurstIndex>
       <wktAoi/>
@@ -100,7 +100,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <subswath>IW2</subswath>
-      <selectedPolarisations>VV,VH</selectedPolarisations>
+      <selectedPolarisations>$polarisation</selectedPolarisations>
       <firstBurstIndex>1</firstBurstIndex>
       <lastBurstIndex>9999</lastBurstIndex>
       <wktAoi/>
@@ -131,7 +131,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <subswath>IW3</subswath>
-      <selectedPolarisations>VV,VH</selectedPolarisations>
+      <selectedPolarisations>$polarisation</selectedPolarisations>
       <firstBurstIndex>1</firstBurstIndex>
       <lastBurstIndex>9999</lastBurstIndex>
       <wktAoi/>
@@ -144,7 +144,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <subswath>IW3</subswath>
-      <selectedPolarisations>VV,VH</selectedPolarisations>
+      <selectedPolarisations>$polarisation</selectedPolarisations>
       <firstBurstIndex>1</firstBurstIndex>
       <lastBurstIndex>9999</lastBurstIndex>
       <wktAoi/>
