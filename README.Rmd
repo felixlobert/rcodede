@@ -1,5 +1,6 @@
 ---
 output: github_document
+always_allow_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -36,13 +37,21 @@ devtools::install_github("felixlobert/rcodede")
 
 This is a basic example which shows you how to query available Sentinel-1 scenes for a given area of interest and multiple filter criteria. The function 'rcodede::getScenes' creates an HTTP-GET request for the CODE-DE EO Finder API and processes the results for an easy usage.
 
-```{r example, eval = TRUE, message = FALSE}
-library(rcodede)
+```{r warning = FALSE, message = FALSE, results = FALSE, error = FALSE, eval = TRUE}
+library(sf)
+library(mapview)
 
 # Create example AOI
 aoi <- c(10.441054, 52.286959) %>%
   sf::st_point() %>%
   sf::st_sfc(crs = 4326)
+
+mapview::mapView(aoi, map.types = "Esri.WorldImagery")
+```
+
+
+```{r example, eval = TRUE, message = FALSE}
+library(rcodede)
 
 # Query footprint and metadata of available scenes for the AOI and given criteria
 scenes <-
@@ -51,7 +60,8 @@ scenes <-
     bufferDist = 100,
     startDate = "2019-01-01",
     endDate = "2019-01-31",
-    productType = "SLC"
+    productType = "SLC",
+    view = TRUE
   )
 ```
 
@@ -67,36 +77,43 @@ If the CODE-DE satellite data repository is mounted to the used machine, process
 
 The next example shows the estimation of the interferometric coherence for a selected swath based on two subsequent Sentinel-1 scenes from the same relative orbit. The function 'rcodede::estimateCoherence' creates a command for the esa SNAP Graph Processing Tool that is executed in the terminal. A pre-built SNAP-Workflow delivered with the package is then applied to the selected scenes.
 
-```{r warning = F, message = FALSE, results = FALSE, error = FALSE, eval = TRUE}
+```{r}
 # filter for scenes from same orbit to ensure same acquisition geometry
 scenes.filtered <-
   scenes %>% 
   dplyr::filter(relativeOrbitNumber == 44)
 
-# create temporary dir
-outputDirectory <- tempdir()
+mapview::mapview(scenes.filtered, alpha.regions = .2, map.types = "Esri.WorldImagery") +
+  mapview::mapview(aoi)
+```
+Estimate the interferometric coherence for the first pair from the filtered scenes.
 
+```{r warning = F, message = FALSE, results = FALSE, error = FALSE, eval = TRUE}
 # estimate the coherence for the first two scenes in the sf object
-estimateCoherence(
-  master = scenes.filtered$productPath[1],
-  slave = scenes.filtered$productPath[2],
-  outputDirectory = outputDirectory,
-  fileName = "/coherence.tif",
-  polarisation = "VH",
-  swath = "IW1",
-  firstBurst = 1,
-  lastBurst = 1,
-  numCores = 8,
-  maxMemory = 48,
-  execute = TRUE)
+coherence <- 
+  estimateCoherence(
+    master = scenes.filtered$productPath[1],
+    slave = scenes.filtered$productPath[2],
+    outputDirectory = "/home/",
+    fileName = "coherence.tif",
+    polarisation = "VH",
+    swath = "all",
+    aoi = aoi,
+    aoiBuffer = 500,
+    numCores = 6,
+    maxMemory = 32,
+    execute = TRUE,
+    return = TRUE)
 ```
 
 The created coherence raster or stack can then be plotted or further processed:
 
 ```{r message = FALSE, eval = TRUE}
-coherence <- raster::raster(paste0(outputDirectory,"/coherence.tif"))
 
-raster::plot(coherence, main = paste0("Estimated Coherence ", scenes.filtered$date[1]))
+mapview::mapview(coherence$layer, map.types = "Esri.WorldImagery", alpha = .75) +
+  mapview::mapview(aoi, burst =T)
+
+
 ```
 
 

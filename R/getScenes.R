@@ -112,7 +112,7 @@ getScenes <-
       dplyr::mutate(date = as.Date(date))
 
     if (view == T) {
-      print(mapview::mapview(scenes, alpha.regions = .2) +
+      print(mapview::mapview(scenes, alpha.regions = .2, map.types = "Esri.WorldImagery") +
               mapview::mapview(aoi))
     }
 
