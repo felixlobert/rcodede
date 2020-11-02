@@ -76,6 +76,8 @@ estimateCoherence <-
     )
 
     if(execute==TRUE){
-    system(cmd)
+      system(cmd)
+    } else{
+      cat(cmd)
     }
   }
