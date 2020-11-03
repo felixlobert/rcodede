@@ -1,5 +1,5 @@
 Package: rcodede
-Title: Fuctions to use the CODE-DE satellite data repository
+Title: Fuctions to use the CODE-DE satellite data repository in R
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Felix",
