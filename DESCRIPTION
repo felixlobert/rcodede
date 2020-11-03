@@ -23,3 +23,5 @@ Imports:
     raster
 Suggests:
     mapview
+URL: https://github.com/felixlobert/rcodede
+BugReports: https://github.com/felixlobert/rcodede/issues
