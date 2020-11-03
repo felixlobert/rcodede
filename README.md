@@ -58,11 +58,10 @@ library(rcodede)
 scenes <-
   getScenes(
     aoi = aoi,
-    bufferDist = 100,
+    bufferDist = 300,
     startDate = "2019-01-01",
     endDate = "2019-01-31",
-    productType = "SLC",
-    view = FALSE
+    productType = "SLC"
   )
 
 # load ggplot library
@@ -131,10 +130,10 @@ coherence <-
     slave = scenes.filtered$productPath[2],
     outputDirectory = "/home/",
     fileName = "coherence.tif",
+    resolution = 10,
     polarisation = "VH",
-    swath = "all",
     aoi = aoi,
-    aoiBuffer = 1000,
+    aoiBuffer = 500,
     numCores = 6,
     maxMemory = 32,
     execute = TRUE,
@@ -150,12 +149,11 @@ processed:
 ggplot() +
   geom_raster(data = coherence %>% raster::as.data.frame(xy = TRUE),
               aes(x = x, y = y, fill = layer)) +
-  geom_sf(data = aoi %>% st_transform(st_crs(coherence)),
-          show.legend = "AOI") +
+  geom_sf(data = aoi %>% st_transform(st_crs(coherence))) +
   geom_sf_text(
     data = aoi %>% st_transform(st_crs(coherence)),
     label = "AOI",
-    nudge_x = 75
+    nudge_x = 40
   ) +
   labs(
     x = "Latitude",
