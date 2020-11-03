@@ -1,6 +1,6 @@
 ---
 output: github_document
-always_allow_html: true
+# always_allow_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 This package is in the earliest stages of development and is in no way ready for use.
 
-The goal of rcodede is to simpify the usage of the CODE-DE satellite data repository with R and provide functions for basic processing steps with the esa SNAP Graph Processing Tool.
+The goal of rcodede is to simplify the usage of the [CODE-DE](https://code-de.org/) satellite data repository with R and provide functions for basic processing steps with the esa SNAP Graph Processing Tool.
 
 ## Installation
 
@@ -31,26 +31,25 @@ You can install the development version from [GitHub](https://github.com/) with:
 install.packages("devtools")
 devtools::install_github("felixlobert/rcodede")
 ```
+
+If the function for the processing of satellite data shall be used, [esa SNAP](http://step.esa.int/main/download/snap-download/) has to be installed on the system and the SNAP Graph Processing tool (GPT) has to be executable from the command line. You can check this by typing "gpt" to the command line. If the console shows the GPT context menu, you are ready to go.
+
 ## Examples
 
 ### Query available scenes
 
 This is a basic example which shows you how to query available Sentinel-1 scenes for a given area of interest and multiple filter criteria. The function 'rcodede::getScenes' creates an HTTP-GET request for the CODE-DE EO Finder API and processes the results for an easy usage.
 
-```{r warning = FALSE, message = FALSE, results = FALSE, error = FALSE, eval = TRUE}
+```{r warning = FALSE, message = FALSE, error = FALSE, eval = TRUE}
+# load simple features library
 library(sf)
-library(mapview)
 
 # Create example AOI
 aoi <- c(10.441054, 52.286959) %>%
   sf::st_point() %>%
   sf::st_sfc(crs = 4326)
 
-mapview::mapView(aoi, map.types = "Esri.WorldImagery")
-```
-
-
-```{r example, eval = TRUE, message = FALSE}
+# load rcodede package
 library(rcodede)
 
 # Query footprint and metadata of available scenes for the AOI and given criteria
@@ -61,8 +60,20 @@ scenes <-
     startDate = "2019-01-01",
     endDate = "2019-01-31",
     productType = "SLC",
-    view = TRUE
+    view = FALSE
   )
+
+# load ggplot library
+library(ggplot2)
+
+# plot queried scenes and AOI
+ggplot(scenes) +
+  geom_sf(aes(fill = factor(relativeOrbitNumber)), alpha = .75) +
+  geom_sf(data = aoi) +
+  geom_sf_text(data = aoi,
+               label = "AOI", nudge_x = .35) +
+  labs(x = "Latitude", y = "Longitude", fill = "relativeOrbitNumber") +
+  theme_bw()
 ```
 
 This table shows the 5 top entries of the resulting sf object:
@@ -77,20 +88,27 @@ If the CODE-DE satellite data repository is mounted to the used machine, process
 
 The next example shows the estimation of the interferometric coherence for a selected swath based on two subsequent Sentinel-1 scenes from the same relative orbit. The function 'rcodede::estimateCoherence' creates a command for the esa SNAP Graph Processing Tool that is executed in the terminal. A pre-built SNAP-Workflow delivered with the package is then applied to the selected scenes.
 
-```{r}
+```{r warning=FALSE, message=FALSE, error=FALSE}
 # filter for scenes from same orbit to ensure same acquisition geometry
 scenes.filtered <-
-  scenes %>% 
-  dplyr::filter(relativeOrbitNumber == 44)
+  scenes %>%
+  dplyr::filter(relativeOrbitNumber == 117)
 
-mapview::mapview(scenes.filtered, alpha.regions = .2, map.types = "Esri.WorldImagery") +
-  mapview::mapview(aoi)
+# plot filtered scenes
+ggplot(scenes.filtered) +
+  geom_sf(aes(fill = factor(relativeOrbitNumber)), alpha = .75) +
+  geom_sf(data = aoi) +
+  geom_sf_text(data = aoi,
+               label = "AOI",
+               nudge_x = .25) +
+  labs(x = "Latitude", y = "Longitude", fill = "relativeOrbitNumber") +
+  theme_bw()
 ```
 Estimate the interferometric coherence for the first pair from the filtered scenes.
 
 ```{r warning = F, message = FALSE, results = FALSE, error = FALSE, eval = TRUE}
 # estimate the coherence for the first two scenes in the sf object
-coherence <- 
+coherence <-
   estimateCoherence(
     master = scenes.filtered$productPath[1],
     slave = scenes.filtered$productPath[2],
@@ -99,21 +117,35 @@ coherence <-
     polarisation = "VH",
     swath = "all",
     aoi = aoi,
-    aoiBuffer = 500,
+    aoiBuffer = 1000,
     numCores = 6,
     maxMemory = 32,
     execute = TRUE,
-    return = TRUE)
+    return = TRUE
+  )
 ```
 
 The created coherence raster or stack can then be plotted or further processed:
 
 ```{r message = FALSE, eval = TRUE}
-
-mapview::mapview(coherence$layer, map.types = "Esri.WorldImagery", alpha = .75) +
-  mapview::mapview(aoi, burst =T)
-
-
+# plot the returned coherence raster
+ggplot() +
+  geom_raster(data = coherence %>% raster::as.data.frame(xy = TRUE),
+              aes(x = x, y = y, fill = layer)) +
+  geom_sf(data = aoi %>% st_transform(st_crs(coherence)),
+          show.legend = "AOI") +
+  geom_sf_text(
+    data = aoi %>% st_transform(st_crs(coherence)),
+    label = "AOI",
+    nudge_x = 75
+  ) +
+  labs(
+    x = "Latitude",
+    y = "Longitude",
+    fill = "Coherence",
+    title = paste0("Coherence VH ", scenes.filtered$date[1])
+  ) +
+  theme_bw()
 ```
 
 
