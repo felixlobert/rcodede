@@ -6,6 +6,7 @@
 #' @param slave Slave scene.
 #' @param outputDirectory Directory for the output file.
 #' @param fileName Name of the output file.
+#' @param resolution Spatial resolution of the output raster in meters.
 #' @param polarisation Plarisations to be processed. One of "VH", "VV", or "VV,VH". Defaults to "VV,VH".
 #' @param swath Swath to be processed. One of "IW1", "IW2", "IW3" or "all".
 #' @param firstBurst First burst index from the chosen swath. Between 1 and 9. Only relevant if swath != "all".
@@ -42,6 +43,7 @@
 #'   slave = scenes$productPath[2],
 #'   outputDirectory = getwd(),
 #'   fileName = "test.tif",
+#'   resolution = 30,
 #'   polarisation = "VV,VH",
 #'   swath = "IW1",
 #'   firstBurst = 1,
@@ -54,8 +56,9 @@ estimateCoherence <-
            slave,
            outputDirectory,
            fileName,
+           resolution,
            polarisation = "VV,VH",
-           swath = "IW1",
+           swath = "all",
            firstBurst = 1,
            lastBurst = 9,
            aoi = NULL,
@@ -80,6 +83,7 @@ estimateCoherence <-
           " -Pinput2=", slave, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
           " -Ppolarisation=", polarisation,
+          " -Presolution=", resolution,
           " -q ", numCores,
           " -J-Xms2G",
           " -J-Xmx", maxMemory, "G"
@@ -99,6 +103,7 @@ estimateCoherence <-
           " -Ppolarisation=", polarisation,
           " -PfirstBurst=", firstBurst,
           " -PlastBurst=", lastBurst,
+          " -Presolution=", resolution,
           " -q ", numCores,
           " -J-Xms2G",
           " -J-Xmx", maxMemory, "G"
@@ -108,12 +113,12 @@ estimateCoherence <-
     } else{
 
       subset <- aoi %>%
-        st_transform(32632) %>%
-        st_buffer(aoiBuffer) %>%
-        st_transform(4326)%>%
-        st_bbox() %>%
-        st_as_sfc() %>%
-        st_as_text(digits=15)
+        sf::st_transform(32632) %>%
+        sf::st_buffer(aoiBuffer) %>%
+        sf::st_transform(4326)%>%
+        sf::st_bbox() %>%
+        sf::st_as_sfc() %>%
+        sf::st_as_text(digits=15)
 
       if(swath == "all"){
 
@@ -126,6 +131,7 @@ estimateCoherence <-
           " -Pinput2=", slave, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
           " -Ppolarisation=", polarisation,
+          " -Presolution=", resolution,
           " -Paoi=\"", subset,"\"",
           " -q ", numCores,
           " -J-Xms2G",
@@ -146,6 +152,7 @@ estimateCoherence <-
           " -Ppolarisation=", polarisation,
           " -PfirstBurst=", firstBurst,
           " -PlastBurst=", lastBurst,
+          " -Presolution=", resolution,
           " -Paoi=\"", subset,"\"",
           " -q ", numCores,
           " -J-Xms2G",

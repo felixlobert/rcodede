@@ -9,8 +9,9 @@ estimateCoherence(
   slave,
   outputDirectory,
   fileName,
+  resolution,
   polarisation = "VV,VH",
-  swath = "IW1",
+  swath = "all",
   firstBurst = 1,
   lastBurst = 9,
   aoi = NULL,
@@ -29,6 +30,8 @@ estimateCoherence(
 \item{outputDirectory}{Directory for the output file.}
 
 \item{fileName}{Name of the output file.}
+
+\item{resolution}{Spatial resolution of the output raster in meters.}
 
 \item{polarisation}{Plarisations to be processed. One of "VH", "VV", or "VV,VH". Defaults to "VV,VH".}
 
@@ -78,6 +81,7 @@ estimateCoherence(
   slave = scenes$productPath[2],
   outputDirectory = getwd(),
   fileName = "test.tif",
+  resolution = 30,
   polarisation = "VV,VH",
   swath = "IW1",
   firstBurst = 1,
