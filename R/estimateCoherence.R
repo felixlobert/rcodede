@@ -31,25 +31,23 @@
 #' scenes <-
 #'   getScenes(
 #'     aoi = aoi,
-#'     bufferDist = 100,
 #'     startDate = "2019-01-01",
-#'     endDate = "2019-01-31",
+#'     endDate = "2019-01-15",
 #'     productType = "SLC"
 #'   ) %>%
-#'   dplyr::filter(relativeOrbitNumber == 44)
+#'   dplyr::filter(relativeOrbitNumber == 117)
 #'
 #' estimateCoherence(
-#'   master = scenes$productPath[1],
-#'   slave = scenes$productPath[2],
+#'   master = scenes$productPath[2],
+#'   slave = scenes$productPath[1],
 #'   outputDirectory = getwd(),
 #'   fileName = "test.tif",
 #'   resolution = 30,
 #'   polarisation = "VV,VH",
-#'   swath = "IW1",
-#'   firstBurst = 1,
-#'   lastBurst = 1,
-#'   numCores = 8,
-#'   maxMemory=50,
+#'   aoi = aoi,
+#'   aoiBuffer = 250,
+#'   numCores = 6,
+#'   maxMemory=32,
 #'   execute = FALSE)
 estimateCoherence <-
   function(master,
@@ -112,8 +110,17 @@ estimateCoherence <-
 
     } else{
 
+      aoi.epsg <-
+        aoi %>%
+        sf:: st_transform(4326) %>%
+        sf::st_coordinates() %>%
+        data.frame() %>%
+        dplyr::slice(1) %>%
+        dplyr::mutate(epsg = 32700 - round((45 + Y) / 90, 0) * 100 + round((183 + X) / 6, 0)) %>%
+        dplyr::pull(epsg)
+
       subset <- aoi %>%
-        sf::st_transform(32632) %>%
+        sf::st_transform(aoi.epsg) %>%
         sf::st_buffer(aoiBuffer) %>%
         sf::st_transform(4326)%>%
         sf::st_bbox() %>%

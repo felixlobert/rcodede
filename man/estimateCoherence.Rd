@@ -69,24 +69,22 @@ aoi <- c(10.441054, 52.286959) \%>\%
 scenes <-
   getScenes(
     aoi = aoi,
-    bufferDist = 100,
     startDate = "2019-01-01",
-    endDate = "2019-01-31",
+    endDate = "2019-01-15",
     productType = "SLC"
   ) \%>\%
-  dplyr::filter(relativeOrbitNumber == 44)
+  dplyr::filter(relativeOrbitNumber == 117)
 
 estimateCoherence(
-  master = scenes$productPath[1],
-  slave = scenes$productPath[2],
+  master = scenes$productPath[2],
+  slave = scenes$productPath[1],
   outputDirectory = getwd(),
   fileName = "test.tif",
   resolution = 30,
   polarisation = "VV,VH",
-  swath = "IW1",
-  firstBurst = 1,
-  lastBurst = 1,
-  numCores = 8,
-  maxMemory=50,
+  aoi = aoi,
+  aoiBuffer = 250,
+  numCores = 6,
+  maxMemory=32,
   execute = FALSE)
 }
