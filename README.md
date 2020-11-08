@@ -25,12 +25,12 @@ install.packages("devtools")
 devtools::install_github("felixlobert/rcodede")
 ```
 
-If the function for the processing of satellite data shall be used, [esa
-SNAP](http://step.esa.int/main/download/snap-download/) has to be
-installed on the system and the SNAP Graph Processing tool (GPT) has to
-be executable from the command line. You can check this by typing “gpt”
-to the command line. If the console shows the GPT context menu, you are
-ready to go.
+If the included functions for the processing of satellite data shall be
+used, [esa SNAP](http://step.esa.int/main/download/snap-download/) has
+to be installed on the system and the SNAP Graph Processing tool (GPT)
+has to be executable from the command line. You can check this by typing
+“gpt” to the command line. If the console shows the GPT context menu
+after you press enter, you are ready to go.
 
 ## Examples
 
@@ -38,9 +38,10 @@ ready to go.
 
 This is a basic example which shows you how to query available
 Sentinel-1 scenes for a given area of interest and multiple filter
-criteria. The function ‘rcodede::getScenes’ creates an HTTP-GET request
+criteria. The function `rcodede::getScenes` creates an HTTP-GET request
 for the CODE-DE EO Finder API and processes the results for an easy
-usage.
+usage. `?getScenes` shows you, which criteria are supported at the
+moment.
 
 ``` r
 # load simple features library
@@ -54,30 +55,18 @@ aoi <- c(10.441054, 52.286959) %>%
 # load rcodede package
 library(rcodede)
 
-# Query footprint and metadata of available scenes for the AOI and given criteria
-scenes <-
+# Query footprints and metadata of available scenes for the AOI and given criteria
+scenes <- 
   getScenes(
     aoi = aoi,
-    bufferDist = 300,
     startDate = "2019-01-01",
-    endDate = "2019-01-31",
-    productType = "SLC"
+    endDate = "2019-01-15",
+    productType = "SLC",
+    view = T
   )
-
-# load ggplot library
-library(ggplot2)
-
-# plot queried scenes and AOI
-ggplot(scenes) +
-  geom_sf(aes(fill = factor(relativeOrbitNumber)), alpha = .75) +
-  geom_sf(data = aoi) +
-  geom_sf_text(data = aoi,
-               label = "AOI", nudge_x = .35) +
-  labs(x = "Latitude", y = "Longitude", fill = "relativeOrbitNumber") +
-  theme_bw()
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+![Queried Scenes](man/figures/scenes.png)
 
 This table shows the 5 top entries of the resulting sf object:
 
@@ -94,12 +83,11 @@ This table shows the 5 top entries of the resulting sf object:
 If the CODE-DE satellite data repository is mounted to the used machine,
 processing steps can be directly executed to the queried scenes.
 
+#### Coherence Estimation
+
 The next example shows the estimation of the interferometric coherence
-for a selected swath based on two subsequent Sentinel-1 scenes from the
-same relative orbit. The function ‘rcodede::estimateCoherence’ creates a
-command for the esa SNAP Graph Processing Tool that is executed in the
-terminal. A pre-built SNAP-Workflow delivered with the package is then
-applied to the selected scenes.
+for two subsequent Sentinel-1 scenes. To ensure similar acquisition
+geometries of the scenes, only one relative orbit is selected.
 
 ``` r
 # filter for scenes from same orbit to ensure same acquisition geometry
@@ -107,33 +95,44 @@ scenes.filtered <-
   scenes %>%
   dplyr::filter(relativeOrbitNumber == 117)
 
-# plot filtered scenes
-ggplot(scenes.filtered) +
-  geom_sf(aes(fill = factor(relativeOrbitNumber)), alpha = .75) +
-  geom_sf(data = aoi) +
-  geom_sf_text(data = aoi,
-               label = "AOI",
-               nudge_x = .25) +
-  labs(x = "Latitude", y = "Longitude", fill = "relativeOrbitNumber") +
-  theme_bw()
+mapview::mapview(
+  x = scenes.filtered,
+  alpha.regions = .15,
+  map.types = "Esri.WorldImagery",
+  zcol = "relativeOrbitNumber"
+) +
+  mapview::mapview(
+    x = aoi,
+    color = "black",
+    col.regions = "white",
+    alpha.regions = .5,
+    legend = FALSE
+  )
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
-Estimate the interferometric coherence for the first pair from the
-filtered scenes.
+![Filtered Scenes](man/figures/scenesFiltered.png)
+
+The function `rcodede::estimateCoherence` creates a command for the esa
+SNAP Graph Processing Tool that is executed in the background if
+`execute = TRUE`. A pre-built SNAP-Workflow delivered with the package
+is then applied to the selected scenes. If `execute = FALSE`, the
+command is returned as string instead. The output is written to a
+defined path and is returned if `return = TRUE`. Several processing
+parameters such as the spatial resolution of the output raster or the
+desired polarizations can be set.
 
 ``` r
 # estimate the coherence for the first two scenes in the sf object
 coherence <-
   estimateCoherence(
-    master = scenes.filtered$productPath[1],
-    slave = scenes.filtered$productPath[2],
+    master = scenes.filtered$productPath[2],
+    slave = scenes.filtered$productPath[1],
     outputDirectory = "/home/",
     fileName = "coherence.tif",
     resolution = 10,
     polarisation = "VH",
     aoi = aoi,
-    aoiBuffer = 500,
+    aoiBuffer = 300,
     numCores = 6,
     maxMemory = 32,
     execute = TRUE,
@@ -146,22 +145,20 @@ processed:
 
 ``` r
 # plot the returned coherence raster
-ggplot() +
-  geom_raster(data = coherence %>% raster::as.data.frame(xy = TRUE),
-              aes(x = x, y = y, fill = layer)) +
-  geom_sf(data = aoi %>% st_transform(st_crs(coherence))) +
-  geom_sf_text(
-    data = aoi %>% st_transform(st_crs(coherence)),
-    label = "AOI",
-    nudge_x = 40
-  ) +
-  labs(
-    x = "Latitude",
-    y = "Longitude",
-    fill = "Coherence",
-    title = paste0("Coherence VH ", scenes.filtered$date[1])
-  ) +
-  theme_bw()
+mapview::mapview(
+  x = coherence$layer,
+  layer.name = paste0("Coherence VH\n", scenes.filtered$date[2]),
+  alpha = .5,
+  na.color = "transparent",
+  map.types = "Esri.WorldImagery"
+) +
+  mapview::mapview(
+    x = aoi,
+    color = "black",
+    col.regions = "white",
+    alpha.regions = .5,
+    legend = FALSE
+  )
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+![Estimated Coherence](man/figures/coherence.png)
