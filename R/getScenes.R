@@ -28,7 +28,8 @@
 #'     bufferDist = 100,
 #'     startDate = "2019-01-01",
 #'     endDate = "2019-01-31",
-#'     productType = "SLC"
+#'     productType = "SLC",
+#'     view = T
 #'   )
 getScenes <-
   function(aoi,
@@ -41,12 +42,25 @@ getScenes <-
            relativeOrbitNumber = NULL,
            view = FALSE) {
 
-    aoi <- aoi %>%
-      sf::st_transform(32632) %>%
+    # get epsg code of utm zone for given aoi
+    aoi.epsg <-
+      aoi %>%
+      sf:: st_transform(4326) %>%
+      sf::st_coordinates() %>%
+      data.frame() %>%
+      dplyr::slice(1) %>%
+      dplyr::mutate(epsg = 32700 - round((45 + Y) / 90, 0) * 100 + round((183 + X) / 6, 0)) %>%
+      dplyr::pull(epsg)
+
+    # buffer aoi with given distance
+    aoi.buffered <-
+      aoi %>%
+      sf::st_transform(aoi.epsg) %>%
       sf::st_buffer(bufferDist) %>%
       sf::st_transform(4326)
 
-    aoi.wkt <- aoi %>%
+    aoi.wkt <-
+      aoi.buffered %>%
       sf::st_bbox() %>%
       sf::st_as_sfc() %>%
       sf::st_as_text(digits = 15) %>%
@@ -106,14 +120,16 @@ getScenes <-
       dplyr::arrange(date) %>%
       sf::st_as_sf(wkt = "footprint") %>%
       sf::`st_crs<-`(sf::st_crs(4326)) %>%
-      dplyr::mutate(numberAoiGeoms = sf::st_contains_properly(., aoi) %>% lengths) %>%
+      dplyr::mutate(numberAoiGeoms = sf::st_contains_properly(., aoi.buffered) %>% lengths) %>%
       dplyr::select(date, platform, orbitDirection, relativeOrbitNumber, centroidLat, centroidLon, productPath, numberAoiGeoms, footprint) %>%
       dplyr::arrange(date, relativeOrbitNumber) %>%
       dplyr::mutate(date = as.Date(date))
 
     if (view == T) {
-      print(mapview::mapview(scenes, alpha.regions = .2, map.types = "Esri.WorldImagery") +
-              mapview::mapview(aoi))
+      print(mapview::mapview(scenes, alpha.regions = .075, map.types = "Esri.WorldImagery",
+                             zcol = "relativeOrbitNumber") +
+              mapview::mapview(aoi, color = "black", col.regions = "white", alpha.regions = .5,
+                               legend = FALSE))
     }
 
     return(scenes)
