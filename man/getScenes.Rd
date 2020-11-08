@@ -6,7 +6,7 @@
 \usage{
 getScenes(
   aoi,
-  bufferDist = 0,
+  bufferDist = NULL,
   startDate,
   endDate,
   productType,
@@ -51,9 +51,9 @@ aoi <- c(10.441054, 52.286959) \%>\%
 scenes <-
   getScenes(
     aoi = aoi,
-    bufferDist = 100,
     startDate = "2019-01-01",
-    endDate = "2019-01-31",
-    productType = "SLC"
+    endDate = "2019-01-15",
+    productType = "SLC",
+    view = TRUE
   )
 }

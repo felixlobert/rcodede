@@ -26,9 +26,9 @@
 #'   getScenes(
 #'     aoi = aoi,
 #'     startDate = "2019-01-01",
-#'     endDate = "2019-01-31",
+#'     endDate = "2019-01-15",
 #'     productType = "SLC",
-#'     view = T
+#'     view = TRUE
 #'   )
 getScenes <-
   function(aoi,
@@ -137,7 +137,7 @@ getScenes <-
       dplyr::mutate(date = as.Date(date))
 
     if (view == T) {
-      print(mapview::mapview(scenes, alpha.regions = .075, map.types = "Esri.WorldImagery",
+      print(mapview::mapview(scenes, alpha.regions = .15, map.types = "Esri.WorldImagery",
                              zcol = "relativeOrbitNumber") +
               mapview::mapview(aoi, color = "black", col.regions = "white", alpha.regions = .5,
                                legend = FALSE))
