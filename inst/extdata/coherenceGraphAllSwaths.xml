@@ -315,7 +315,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <file>$output</file>
-      <formatName>GeoTIFF-BigTIFF</formatName>
+      <formatName>$format</formatName>
     </parameters>
   </node>
 </graph>

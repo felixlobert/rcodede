@@ -17,6 +17,7 @@
 #' @param maxMemory Amount of memory to be used in GB.
 #' @param execute logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.
 #' @param return logical if processed raster or stack shall be returned.
+#' @param BigTIFF logical if output should be written as BigTIFF.
 #'
 #' @return
 #' @export
@@ -64,8 +65,10 @@ estimateCoherence <-
            numCores,
            maxMemory,
            execute = FALSE,
-           return = FALSE) {
+           return = FALSE,
+           BigTIFF = FALSE) {
 
+    if(BigTIFF) format = "GeoTIFF-BigTIFF" else format = "GeoTIFF"
 
 
     if(is.null(aoi)){
@@ -82,6 +85,7 @@ estimateCoherence <-
           " -Poutput=", outputDirectory, fileName,
           " -Ppolarisation=", polarisation,
           " -Presolution=", resolution,
+          " -Pformat=", format,
           " -q ", numCores,
           " -J-Xms2G",
           " -J-Xmx", maxMemory, "G"
@@ -102,6 +106,7 @@ estimateCoherence <-
           " -PfirstBurst=", firstBurst,
           " -PlastBurst=", lastBurst,
           " -Presolution=", resolution,
+          " -Pformat=", format,
           " -q ", numCores,
           " -J-Xms2G",
           " -J-Xmx", maxMemory, "G"
@@ -139,6 +144,7 @@ estimateCoherence <-
           " -Poutput=", outputDirectory, fileName,
           " -Ppolarisation=", polarisation,
           " -Presolution=", resolution,
+          " -Pformat=", format,
           " -Paoi=\"", subset,"\"",
           " -q ", numCores,
           " -J-Xms2G",
@@ -160,6 +166,7 @@ estimateCoherence <-
           " -PfirstBurst=", firstBurst,
           " -PlastBurst=", lastBurst,
           " -Presolution=", resolution,
+          " -Pformat=", format,
           " -Paoi=\"", subset,"\"",
           " -q ", numCores,
           " -J-Xms2G",
