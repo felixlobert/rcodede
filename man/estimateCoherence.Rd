@@ -19,7 +19,8 @@ estimateCoherence(
   numCores,
   maxMemory,
   execute = FALSE,
-  return = FALSE
+  return = FALSE,
+  BigTIFF = FALSE
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ estimateCoherence(
 \item{execute}{logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.}
 
 \item{return}{logical if processed raster or stack shall be returned.}
+
+\item{BigTIFF}{logical if output should be written as BigTIFF.}
 }
 \value{
 
