@@ -13,8 +13,8 @@
 #' @param lastBurst Last burst index. Has to be higher than or equal to first burst. Only relevant if swath != "all".
 #' @param aoi sf object for the area of interest.
 #' @param aoiBuffer Buffer around aoi in meters. Defaults to 0.
-#' @param numCores Number of CPUs to be used in the process.
-#' @param maxMemory Amount of memory to be used in GB.
+#' @param numCores Number of CPUs to be used in the process. Chosen by SNAP if not set.
+#' @param maxMemory Amount of memory to be used in GB. Chosen by SNAP if not set.
 #' @param execute logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.
 #' @param return logical if processed raster or stack shall be returned.
 #' @param BigTIFF logical if output should be written as BigTIFF.
@@ -62,14 +62,13 @@ estimateCoherence <-
            lastBurst = 9,
            aoi = NULL,
            aoiBuffer = 0,
-           numCores,
-           maxMemory,
+           numCores = NULL,
+           maxMemory = NULL,
            execute = FALSE,
            return = FALSE,
            BigTIFF = FALSE) {
 
     if(BigTIFF) format = "GeoTIFF-BigTIFF" else format = "GeoTIFF"
-
 
     if(is.null(aoi)){
 
@@ -86,9 +85,8 @@ estimateCoherence <-
           " -Ppolarisation=", polarisation,
           " -Presolution=", resolution,
           " -Pformat=", format,
-          " -q ", numCores,
-          " -J-Xms2G",
-          " -J-Xmx", maxMemory, "G"
+          if(!is.null(numCores)) paste0(" -q ", numCores),
+          if(!is.null(maxMemory)) paste0(" -J-Xmx", maxMemory, "G")
         )
 
       } else{
@@ -107,9 +105,8 @@ estimateCoherence <-
           " -PlastBurst=", lastBurst,
           " -Presolution=", resolution,
           " -Pformat=", format,
-          " -q ", numCores,
-          " -J-Xms2G",
-          " -J-Xmx", maxMemory, "G"
+          if(!is.null(numCores)) paste0(" -q ", numCores),
+          if(!is.null(maxMemory)) paste0(" -J-Xmx", maxMemory, "G")
         )
       }
 
@@ -146,9 +143,8 @@ estimateCoherence <-
           " -Presolution=", resolution,
           " -Pformat=", format,
           " -Paoi=\"", subset,"\"",
-          " -q ", numCores,
-          " -J-Xms2G",
-          " -J-Xmx", maxMemory, "G"
+          if(!is.null(numCores)) paste0(" -q ", numCores),
+          if(!is.null(maxMemory)) paste0(" -J-Xmx", maxMemory, "G")
         )
 
       } else{
@@ -168,9 +164,8 @@ estimateCoherence <-
           " -Presolution=", resolution,
           " -Pformat=", format,
           " -Paoi=\"", subset,"\"",
-          " -q ", numCores,
-          " -J-Xms2G",
-          " -J-Xmx", maxMemory, "G"
+          if(!is.null(numCores)) paste0(" -q ", numCores),
+          if(!is.null(maxMemory)) paste0(" -J-Xmx", maxMemory, "G")
         )
       }
     }
