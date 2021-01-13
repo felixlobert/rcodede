@@ -16,8 +16,8 @@ estimateCoherence(
   lastBurst = 9,
   aoi = NULL,
   aoiBuffer = 0,
-  numCores,
-  maxMemory,
+  numCores = NULL,
+  maxMemory = NULL,
   execute = FALSE,
   return = FALSE,
   BigTIFF = FALSE
@@ -46,9 +46,9 @@ estimateCoherence(
 
 \item{aoiBuffer}{Buffer around aoi in meters. Defaults to 0.}
 
-\item{numCores}{Number of CPUs to be used in the process.}
+\item{numCores}{Number of CPUs to be used in the process. Chosen by SNAP if not set.}
 
-\item{maxMemory}{Amount of memory to be used in GB.}
+\item{maxMemory}{Amount of memory to be used in GB. Chosen by SNAP if not set.}
 
 \item{execute}{logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.}
 
