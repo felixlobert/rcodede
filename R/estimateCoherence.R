@@ -2,8 +2,8 @@
 #'
 #' Coherence estimation for two corresponding Sentinel-1 SLC scenes
 #'
-#' @param master Master Sentinel-1 scene for coherence estimation.
-#' @param slave Slave scene.
+#' @param scene1 Path of first Sentinel-1 scene for coherence estimation.
+#' @param scene2 Path of second Sentinel-1 scene.
 #' @param outputDirectory Directory for the output file.
 #' @param fileName Name of the output file.
 #' @param resolution Spatial resolution of the output raster in meters.
@@ -40,20 +40,16 @@
 #'   dplyr::filter(relativeOrbitNumber == 117)
 #'
 #' estimateCoherence(
-#'   master = scenes$productPath[2],
-#'   slave = scenes$productPath[1],
+#'   scene1 = scenes$productPath[2],
+#'   scene2 = scenes$productPath[1],
 #'   outputDirectory = getwd(),
 #'   fileName = "test.tif",
 #'   resolution = 30,
-#'   polarisation = "VV,VH",
 #'   aoi = aoi,
-#'   aoiBuffer = 250,
-#'   numCores = 6,
-#'   maxMemory=32,
 #'   execute = FALSE)
 estimateCoherence <-
-  function(master,
-           slave,
+  function(scene1,
+           scene2,
            outputDirectory,
            fileName,
            resolution,
@@ -81,8 +77,8 @@ estimateCoherence <-
 
         cmd <- paste0(
           "sudo gpt ", graph,
-          " -Pinput1=", master, "/manifest.safe",
-          " -Pinput2=", slave, "/manifest.safe",
+          " -Pinput1=", scene1, "/manifest.safe",
+          " -Pinput2=", scene2, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
           " -Ppolarisation=", polarisation,
           " -Presolution=", resolution,
@@ -99,8 +95,8 @@ estimateCoherence <-
 
         cmd <- paste0(
           "sudo gpt ", graph,
-          " -Pinput1=", master, "/manifest.safe",
-          " -Pinput2=", slave, "/manifest.safe",
+          " -Pinput1=", scene1, "/manifest.safe",
+          " -Pinput2=", scene2, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
           " -Pswath=", swath,
           " -Ppolarisation=", polarisation,
@@ -140,8 +136,8 @@ estimateCoherence <-
 
         cmd <- paste0(
           "sudo gpt ", graph,
-          " -Pinput1=", master, "/manifest.safe",
-          " -Pinput2=", slave, "/manifest.safe",
+          " -Pinput1=", scene1, "/manifest.safe",
+          " -Pinput2=", scene2, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
           " -Ppolarisation=", polarisation,
           " -Presolution=", resolution,
@@ -159,8 +155,8 @@ estimateCoherence <-
 
         cmd <- paste0(
           "sudo gpt ", graph,
-          " -Pinput1=", master, "/manifest.safe",
-          " -Pinput2=", slave, "/manifest.safe",
+          " -Pinput1=", scene1, "/manifest.safe",
+          " -Pinput2=", scene2, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
           " -Pswath=", swath,
           " -Ppolarisation=", polarisation,

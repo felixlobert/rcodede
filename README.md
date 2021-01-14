@@ -125,16 +125,14 @@ desired polarizations can be set.
 # estimate the coherence for the first two scenes in the sf object
 coherence <-
   estimateCoherence(
-    master = scenes.filtered$productPath[2],
-    slave = scenes.filtered$productPath[1],
+    scene1 = scenes.filtered$productPath[2],
+    scene2 = scenes.filtered$productPath[1],
     outputDirectory = "/home/",
     fileName = "coherence.tif",
     resolution = 10,
     polarisation = "VH",
     aoi = aoi,
     aoiBuffer = 300,
-    numCores = 6,
-    maxMemory = 32,
     execute = TRUE,
     return = TRUE
   )
