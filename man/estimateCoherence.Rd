@@ -51,7 +51,7 @@ estimateCoherence(
 
 \item{maxMemory}{Amount of memory to be used in GB. Chosen by SNAP if not set.}
 
-\item{crs}{Coordinate reference system to use for output. Defaults to automatic UTM/WGS84.}
+\item{crs}{Coordinate reference system to use for output of format "EPSG:XXXX". Defaults to automatic UTM/WGS84 if not set.}
 
 \item{execute}{logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.}
 

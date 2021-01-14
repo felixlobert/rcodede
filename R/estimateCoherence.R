@@ -15,7 +15,7 @@
 #' @param aoiBuffer Buffer around aoi in meters. Defaults to 0.
 #' @param numCores Number of CPUs to be used in the process. Chosen by SNAP if not set.
 #' @param maxMemory Amount of memory to be used in GB. Chosen by SNAP if not set.
-#' @param crs Coordinate reference system to use for output. Defaults to automatic UTM/WGS84.
+#' @param crs Coordinate reference system to use for output of format "EPSG:XXXX". Defaults to automatic UTM/WGS84 if not set.
 #' @param execute logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.
 #' @param return logical if processed raster or stack shall be returned.
 #' @param BigTIFF logical if output should be written as BigTIFF.
