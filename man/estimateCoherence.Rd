@@ -18,6 +18,7 @@ estimateCoherence(
   aoiBuffer = 0,
   numCores = NULL,
   maxMemory = NULL,
+  crs = "AUTO:42001",
   execute = FALSE,
   return = FALSE,
   BigTIFF = FALSE
@@ -49,6 +50,8 @@ estimateCoherence(
 \item{numCores}{Number of CPUs to be used in the process. Chosen by SNAP if not set.}
 
 \item{maxMemory}{Amount of memory to be used in GB. Chosen by SNAP if not set.}
+
+\item{crs}{Coordinate reference system to use for output. Defaults to automatic UTM/WGS84.}
 
 \item{execute}{logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.}
 

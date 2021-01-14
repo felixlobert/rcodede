@@ -286,7 +286,7 @@
       <demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>
       <imgResamplingMethod>BILINEAR_INTERPOLATION</imgResamplingMethod>
       <pixelSpacingInMeter>$resolution</pixelSpacingInMeter>
-      <mapProjection>AUTO:42001</mapProjection>
+      <mapProjection>$crs</mapProjection>
       <alignToStandardGrid>true</alignToStandardGrid>
       <standardGridOriginX>0.0</standardGridOriginX>
       <standardGridOriginY>0.0</standardGridOriginY>
