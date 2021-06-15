@@ -6,7 +6,8 @@
 #' @param bufferDist Buffer around the AOI in meters. Defaults to 0.
 #' @param startDate Starting date for the query of format "YYYY-MM-DD".
 #' @param endDate End date for query.
-#' @param productType Product type to query. One of "SLC", "GRD", "CARD-INF6", ...
+#' @param satellite Satellite to query from. One of "Sentinel1", "Sentinel2" etc.
+#' @param productType Product type to query. One of "SLC", "GRD", "CARD-INF6", "CARD-BS", "CARD-BS-MC", "L3-WASP"... Only considered if set.
 #' @param sensorMode Sensor mode for Sentinel-1. One of "IW", "EW", ... Only considered if set.
 #' @param orbitDirection Direction of satellite orbit. One of "ascending" or "descending". Only considered if set.
 #' @param relativeOrbitNumber Relative orbit number. Only considered if set.
@@ -27,15 +28,17 @@
 #'     aoi = aoi,
 #'     startDate = "2019-01-01",
 #'     endDate = "2019-01-15",
+#'     satellite = "Sentinel1",
 #'     productType = "SLC",
 #'     view = TRUE
 #'   )
 getScenes <-
   function(aoi,
            bufferDist = NULL,
-           startDate,
-           endDate,
-           productType,
+           startDate = NULL,
+           endDate = NULL,
+           satellite,
+           productType = NULL,
            sensorMode = NULL,
            orbitDirection = NULL,
            relativeOrbitNumber = NULL,
@@ -54,10 +57,10 @@ getScenes <-
     # buffer aoi by given distance / buffer with 1m if POINT and no distance is set
     if(!is.null(bufferDist)){
       aoi.processed <-
-      aoi %>%
-      sf::st_transform(aoi.epsg) %>%
-      sf::st_buffer(bufferDist) %>%
-      sf::st_transform(4326)
+        aoi %>%
+        sf::st_transform(aoi.epsg) %>%
+        sf::st_buffer(bufferDist) %>%
+        sf::st_transform(4326)
     } else if(sf::st_geometry_type(aoi, by_geometry = F) == "POINT"){
       aoi.processed <-
         aoi %>%
@@ -80,7 +83,7 @@ getScenes <-
       gsub(" ", "+", .)
 
     url = paste0(
-      "https://finder.code-de.org/resto/api/collections/Sentinel1/search.json?maxRecords=1000&location=all&sortParam=startDate&sortOrder=descending&status=all&dataset=ESA-DATASET",
+      "https://finder.code-de.org/resto/api/collections/", satellite, "/search.json?maxRecords=1000&location=all&sortParam=startDate&sortOrder=descending&status=all&dataset=ESA-DATASET",
       if (!is.null(orbitDirection))
         paste0("&orbitDirection=", orbitDirection),
       if (!is.null(startDate))

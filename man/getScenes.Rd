@@ -7,9 +7,10 @@
 getScenes(
   aoi,
   bufferDist = NULL,
-  startDate,
-  endDate,
-  productType,
+  startDate = NULL,
+  endDate = NULL,
+  satellite,
+  productType = NULL,
   sensorMode = NULL,
   orbitDirection = NULL,
   relativeOrbitNumber = NULL,
@@ -25,7 +26,9 @@ getScenes(
 
 \item{endDate}{End date for query.}
 
-\item{productType}{Product type to query. One of "SLC", "GRD", "CARD-INF6", ...}
+\item{satellite}{Satellite to query from. One of "Sentinel1", "Sentinel2" etc.}
+
+\item{productType}{Product type to query. One of "SLC", "GRD", "CARD-INF6", "CARD-BS", "CARD-BS-MC", "L3-WASP"... Only considered if set.}
 
 \item{sensorMode}{Sensor mode for Sentinel-1. One of "IW", "EW", ... Only considered if set.}
 
@@ -53,6 +56,7 @@ scenes <-
     aoi = aoi,
     startDate = "2019-01-01",
     endDate = "2019-01-15",
+    satellite = "Sentinel1",
     productType = "SLC",
     view = TRUE
   )
