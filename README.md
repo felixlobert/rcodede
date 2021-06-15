@@ -61,6 +61,7 @@ scenes <-
     aoi = aoi,
     startDate = "2019-01-01",
     endDate = "2019-01-15",
+    satellite = "Sentinel1",
     productType = "SLC",
     view = T
   )
