@@ -5,8 +5,8 @@
 \title{Estimate the interferometric Coherence}
 \usage{
 estimateCoherence(
-  master,
-  slave,
+  scene1,
+  scene2,
   outputDirectory,
   fileName,
   resolution,
@@ -15,7 +15,7 @@ estimateCoherence(
   firstBurst = 1,
   lastBurst = 9,
   aoi = NULL,
-  aoiBuffer = 0,
+  aoiBuffer = NULL,
   numCores = NULL,
   maxMemory = NULL,
   crs = "AUTO:42001",
@@ -25,9 +25,9 @@ estimateCoherence(
 )
 }
 \arguments{
-\item{master}{Master Sentinel-1 scene for coherence estimation.}
+\item{scene1}{Path of first Sentinel-1 scene for coherence estimation.}
 
-\item{slave}{Slave scene.}
+\item{scene2}{Path of second Sentinel-1 scene.}
 
 \item{outputDirectory}{Directory for the output file.}
 
@@ -77,20 +77,17 @@ scenes <-
     aoi = aoi,
     startDate = "2019-01-01",
     endDate = "2019-01-15",
+    satellite = "Sentinel1",
     productType = "SLC"
   ) \%>\%
   dplyr::filter(relativeOrbitNumber == 117)
 
 estimateCoherence(
-  master = scenes$productPath[2],
-  slave = scenes$productPath[1],
+  scene1 = scenes$productPath[2],
+  scene2 = scenes$productPath[1],
   outputDirectory = getwd(),
   fileName = "test.tif",
   resolution = 30,
-  polarisation = "VV,VH",
   aoi = aoi,
-  aoiBuffer = 250,
-  numCores = 6,
-  maxMemory=32,
   execute = FALSE)
 }

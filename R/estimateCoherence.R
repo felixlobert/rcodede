@@ -35,6 +35,7 @@
 #'     aoi = aoi,
 #'     startDate = "2019-01-01",
 #'     endDate = "2019-01-15",
+#'     satellite = "Sentinel1",
 #'     productType = "SLC"
 #'   ) %>%
 #'   dplyr::filter(relativeOrbitNumber == 117)
@@ -58,7 +59,7 @@ estimateCoherence <-
            firstBurst = 1,
            lastBurst = 9,
            aoi = NULL,
-           aoiBuffer = 0,
+           aoiBuffer = NULL,
            numCores = NULL,
            maxMemory = NULL,
            crs = "AUTO:42001",
@@ -123,8 +124,8 @@ estimateCoherence <-
 
       subset <- aoi %>%
         sf::st_transform(aoi.epsg) %>%
-        sf::st_buffer(aoiBuffer) %>%
-        sf::st_transform(4326)%>%
+        {if(!is.null(aoiBuffer)) sf::st_buffer(., aoiBuffer) else .} %>%
+        sf::st_transform(4326) %>%
         sf::st_bbox() %>%
         sf::st_as_sfc() %>%
         sf::st_as_text(digits=15)
