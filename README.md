@@ -7,8 +7,8 @@
 
 <!-- badges: end -->
 
-This package is in the earliest stages of development and is in no way
-ready for use.
+This package is in the earliest stages of development and should be used
+with caution.
 
 The goal of rcodede is to simplify the usage of the
 [CODE-DE](https://code-de.org/) satellite data repository with R and
