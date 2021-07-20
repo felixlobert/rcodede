@@ -9,7 +9,7 @@ getScenes(
   bufferDist = NULL,
   startDate = NULL,
   endDate = NULL,
-  satellite,
+  satellite = NULL,
   productType = NULL,
   sensorMode = NULL,
   orbitDirection = NULL,
@@ -26,7 +26,7 @@ getScenes(
 
 \item{endDate}{End date for query.}
 
-\item{satellite}{Satellite to query from. One of "Sentinel1", "Sentinel2" etc.}
+\item{satellite}{Satellite to query from. One of "Sentinel1", "Sentinel2" etc. If none is chosen, all available results are returned.}
 
 \item{productType}{Product type to query. One of "SLC", "GRD", "CARD-INF6", "CARD-BS", "CARD-BS-MC", "L3-WASP"... Only considered if set.}
 
