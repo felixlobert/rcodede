@@ -19,6 +19,7 @@
 #' @param execute logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.
 #' @param return logical if processed raster or stack shall be returned.
 #' @param BigTIFF logical if output should be written as BigTIFF.
+#' @param sudo logical if command should be executed or returned with superuser rights
 #'
 #' @return
 #' @export
@@ -65,7 +66,8 @@ estimateCoherence <-
            crs = "AUTO:42001",
            execute = FALSE,
            return = FALSE,
-           BigTIFF = FALSE) {
+           BigTIFF = FALSE,
+           sudo = FALSE) {
 
     if(BigTIFF) format = "GeoTIFF-BigTIFF" else format = "GeoTIFF"
 
@@ -77,7 +79,7 @@ estimateCoherence <-
           system.file("extdata", "coherenceGraphAllSwaths.xml", package = "rcodede")
 
         cmd <- paste0(
-          "sudo gpt ", graph,
+          "gpt ", graph,
           " -Pinput1=", scene1, "/manifest.safe",
           " -Pinput2=", scene2, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
@@ -95,7 +97,7 @@ estimateCoherence <-
           system.file("extdata", "coherenceGraphOneSwath.xml", package = "rcodede")
 
         cmd <- paste0(
-          "sudo gpt ", graph,
+          "gpt ", graph,
           " -Pinput1=", scene1, "/manifest.safe",
           " -Pinput2=", scene2, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
@@ -136,7 +138,7 @@ estimateCoherence <-
           system.file("extdata", "coherenceGraphAllSwathsSubset.xml", package = "rcodede")
 
         cmd <- paste0(
-          "sudo gpt ", graph,
+          "gpt ", graph,
           " -Pinput1=", scene1, "/manifest.safe",
           " -Pinput2=", scene2, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
@@ -155,7 +157,7 @@ estimateCoherence <-
           system.file("extdata", "coherenceGraphOneSwathSubset.xml", package = "rcodede")
 
         cmd <- paste0(
-          "sudo gpt ", graph,
+          "gpt ", graph,
           " -Pinput1=", scene1, "/manifest.safe",
           " -Pinput2=", scene2, "/manifest.safe",
           " -Poutput=", outputDirectory, fileName,
@@ -174,9 +176,17 @@ estimateCoherence <-
     }
 
     if(execute==TRUE){
-      system(cmd)
+      if(sudo){
+        system(paste0("sudo ", cmd))
+      } else{
+        system(cmd)
+      }
     } else{
-      cat(cmd)
+      if(sudo){
+        cat(paste0("sudo ", cmd))
+      } else{
+        cat(cmd)
+      }
     }
 
     if(return == TRUE){

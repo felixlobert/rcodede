@@ -21,7 +21,8 @@ estimateCoherence(
   crs = "AUTO:42001",
   execute = FALSE,
   return = FALSE,
-  BigTIFF = FALSE
+  BigTIFF = FALSE,
+  sudo = FALSE
 )
 }
 \arguments{
@@ -58,6 +59,8 @@ estimateCoherence(
 \item{return}{logical if processed raster or stack shall be returned.}
 
 \item{BigTIFF}{logical if output should be written as BigTIFF.}
+
+\item{sudo}{logical if command should be executed or returned with superuser rights}
 }
 \value{
 
