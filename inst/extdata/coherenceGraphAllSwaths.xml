@@ -69,7 +69,7 @@
       <sourceProduct.1 refid="TOPSAR-Split(2)"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
-      <demName>SRTM 3Sec</demName>
+      <demName>SRTM 1Sec HGT</demName>
       <demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>
       <externalDEMFile/>
       <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
@@ -113,7 +113,7 @@
       <sourceProduct.1 refid="TOPSAR-Split(4)"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
-      <demName>SRTM 3Sec</demName>
+      <demName>SRTM 1Sec HGT</demName>
       <demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>
       <externalDEMFile/>
       <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
@@ -157,7 +157,7 @@
       <sourceProduct.1 refid="TOPSAR-Split(6)"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
-      <demName>SRTM 3Sec</demName>
+      <demName>SRTM 1Sec HGT</demName>
       <demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>
       <externalDEMFile/>
       <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
@@ -176,13 +176,13 @@
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <cohWinAz>2</cohWinAz>
       <cohWinRg>10</cohWinRg>
-      <subtractFlatEarthPhase>false</subtractFlatEarthPhase>
+      <subtractFlatEarthPhase>true</subtractFlatEarthPhase>
       <srpPolynomialDegree>5</srpPolynomialDegree>
       <srpNumberPoints>501</srpNumberPoints>
       <orbitDegree>3</orbitDegree>
       <squarePixel>true</squarePixel>
-      <subtractTopographicPhase>false</subtractTopographicPhase>
-      <demName>SRTM 3Sec</demName>
+      <subtractTopographicPhase>true</subtractTopographicPhase>
+      <demName>SRTM 1Sec HGT</demName>
       <externalDEMFile/>
       <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
       <externalDEMApplyEGM>true</externalDEMApplyEGM>
@@ -198,13 +198,13 @@
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <cohWinAz>2</cohWinAz>
       <cohWinRg>10</cohWinRg>
-      <subtractFlatEarthPhase>false</subtractFlatEarthPhase>
+      <subtractFlatEarthPhase>true</subtractFlatEarthPhase>
       <srpPolynomialDegree>5</srpPolynomialDegree>
       <srpNumberPoints>501</srpNumberPoints>
       <orbitDegree>3</orbitDegree>
       <squarePixel>true</squarePixel>
-      <subtractTopographicPhase>false</subtractTopographicPhase>
-      <demName>SRTM 3Sec</demName>
+      <subtractTopographicPhase>true</subtractTopographicPhase>
+      <demName>SRTM 1Sec HGT</demName>
       <externalDEMFile/>
       <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
       <externalDEMApplyEGM>true</externalDEMApplyEGM>
@@ -220,13 +220,13 @@
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <cohWinAz>2</cohWinAz>
       <cohWinRg>10</cohWinRg>
-      <subtractFlatEarthPhase>false</subtractFlatEarthPhase>
+      <subtractFlatEarthPhase>true</subtractFlatEarthPhase>
       <srpPolynomialDegree>5</srpPolynomialDegree>
       <srpNumberPoints>501</srpNumberPoints>
       <orbitDegree>3</orbitDegree>
       <squarePixel>true</squarePixel>
-      <subtractTopographicPhase>false</subtractTopographicPhase>
-      <demName>SRTM 3Sec</demName>
+      <subtractTopographicPhase>true</subtractTopographicPhase>
+      <demName>SRTM 1Sec HGT</demName>
       <externalDEMFile/>
       <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
       <externalDEMApplyEGM>true</externalDEMApplyEGM>
@@ -279,7 +279,7 @@
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <sourceBands/>
-      <demName>SRTM 3Sec</demName>
+      <demName>SRTM 1Sec HGT</demName>
       <externalDEMFile/>
       <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
       <externalDEMApplyEGM>true</externalDEMApplyEGM>
