@@ -32,6 +32,15 @@ has to be executable from the command line. You can check this by typing
 “gpt” to the command line. If the console shows the GPT context menu
 after you press enter, you are ready to go.
 
+### Dockerized SNAP
+
+Alternatively, you can use a [dockerized version of SNAP](https://hub.docker.com/r/mundialis/esa-snap) which 
+is less prone to errors. The image is automatically installed when you 
+use a processing function from rcodede and all file paths to the orbit 
+files and the DEM provided by CODE-DE are set. Just make sure [docker](https://docs.docker.com/get-docker/) 
+is installed on your machine and `docker = TRUE` is set when the processing 
+function is called.
+
 ## Examples
 
 ### Query available scenes
