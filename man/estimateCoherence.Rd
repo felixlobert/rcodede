@@ -2,12 +2,12 @@
 % Please edit documentation in R/estimateCoherence.R
 \name{estimateCoherence}
 \alias{estimateCoherence}
-\title{Estimate the interferometric Coherence}
+\title{Estimate the interferometric coherence}
 \usage{
 estimateCoherence(
   scene1,
   scene2,
-  outputDirectory,
+  outputDirectory = getwd(),
   fileName,
   resolution,
   polarisation = "VV,VH",
@@ -22,6 +22,7 @@ estimateCoherence(
   execute = FALSE,
   return = FALSE,
   BigTIFF = FALSE,
+  docker = FALSE,
   sudo = FALSE
 )
 }
@@ -36,7 +37,7 @@ estimateCoherence(
 
 \item{resolution}{Spatial resolution of the output raster in meters.}
 
-\item{polarisation}{Plarisations to be processed. One of "VH", "VV", or "VV,VH". Defaults to "VV,VH".}
+\item{polarisation}{Polarisations to be processed. One of "VH", "VV", or "VV,VH". Defaults to "VV,VH".}
 
 \item{swath}{Swath to be processed. One of "IW1", "IW2", "IW3" or "all".}
 
@@ -54,11 +55,13 @@ estimateCoherence(
 
 \item{crs}{Coordinate reference system to use for output of format "EPSG:XXXX". Defaults to automatic UTM/WGS84 if not set.}
 
-\item{execute}{logical if command for esa SNAP gpt shall be executed. If FALSE the commmand is printed instead.}
+\item{execute}{logical if command for esa SNAP gpt shall be executed. If FALSE the command is printed instead.}
 
 \item{return}{logical if processed raster or stack shall be returned.}
 
 \item{BigTIFF}{logical if output should be written as BigTIFF.}
+
+\item{docker}{logical if a dockerized version of SNAP (mundialis/esa-snap:ubuntu) should be used. Make sure docker is installed and can be run by the user. The image is pulled automatically from dockerhub on first execution.}
 
 \item{sudo}{logical if command should be executed or returned with superuser rights}
 }
@@ -74,7 +77,7 @@ aoi <- c(10.441054, 52.286959) \%>\%
   sf::st_point() \%>\%
   sf::st_sfc(crs = 4326)
 
-# scenes for aoi and given criteria
+# scenes for AOI and given criteria
 scenes <-
   getScenes(
     aoi = aoi,
@@ -88,7 +91,6 @@ scenes <-
 estimateCoherence(
   scene1 = scenes$productPath[2],
   scene2 = scenes$productPath[1],
-  outputDirectory = getwd(),
   fileName = "test.tif",
   resolution = 30,
   aoi = aoi,

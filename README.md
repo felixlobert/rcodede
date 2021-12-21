@@ -128,7 +128,6 @@ coherence <-
   estimateCoherence(
     scene1 = scenes.filtered$productPath[2],
     scene2 = scenes.filtered$productPath[1],
-    outputDirectory = "/home/",
     fileName = "coherence.tif",
     resolution = 10,
     polarisation = "VH",
