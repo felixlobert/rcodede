@@ -83,7 +83,11 @@ getScenes <-
       gsub(" ", "+", .)
 
     url = paste0(
-      "https://finder.code-de.org/resto/api/collections/",
+      "https://finder.code-de.org/",
+      if(!is.null(satellite) & startsWith(satellite, "Sentinel"))
+        paste0("resto/api/collections/"),
+      if(!is.null(satellite) & startsWith(satellite, "Landsat"))
+        paste0("resto-creodias/api/collections/"),
       if (!is.null(satellite))
         paste0(satellite,"/"),
       "search.json?maxRecords=1000&location=all&sortParam=startDate&sortOrder=descending&status=all&dataset=ESA-DATASET",
