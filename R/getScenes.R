@@ -6,6 +6,7 @@
 #' @param bufferDist Buffer around the AOI in meters. Defaults to 0.
 #' @param startDate Starting date for the query of format "YYYY-MM-DD".
 #' @param endDate End date for query.
+#' @param codede If TRUE (default) use CODE-DE repository covering Germany, if FALSE use CREODIAS for worldwide coverage including Landsat data.
 #' @param satellite Satellite to query from. One of "Sentinel1", "Sentinel2" etc. If none is chosen, all available results are returned.
 #' @param productType Product type to query. One of "SLC", "GRD", "CARD-INF6", "CARD-BS", "CARD-BS-MC", "L3-WASP"... Only considered if set.
 #' @param sensorMode Sensor mode for Sentinel-1. One of "IW", "EW", ... Only considered if set.
@@ -37,6 +38,7 @@ getScenes <-
            bufferDist = NULL,
            startDate = NULL,
            endDate = NULL,
+           codede = TRUE,
            satellite = NULL,
            productType = NULL,
            sensorMode = NULL,
@@ -84,9 +86,9 @@ getScenes <-
 
     url = paste0(
       "https://finder.code-de.org/",
-      if(!is.null(satellite) & startsWith(satellite, "Sentinel"))
-        paste0("resto/api/collections/"),
-      if(!is.null(satellite) & startsWith(satellite, "Landsat"))
+      if(codede)
+        paste0("resto/api/collections/")
+      else
         paste0("resto-creodias/api/collections/"),
       if (!is.null(satellite))
         paste0(satellite,"/"),

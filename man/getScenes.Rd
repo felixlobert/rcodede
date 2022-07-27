@@ -9,6 +9,7 @@ getScenes(
   bufferDist = NULL,
   startDate = NULL,
   endDate = NULL,
+  codede = TRUE,
   satellite = NULL,
   productType = NULL,
   sensorMode = NULL,
@@ -25,6 +26,8 @@ getScenes(
 \item{startDate}{Starting date for the query of format "YYYY-MM-DD".}
 
 \item{endDate}{End date for query.}
+
+\item{codede}{If TRUE (default) use CODE-DE repository covering Germany, if FALSE use CREODIAS for worldwide coverage including Landsat data.}
 
 \item{satellite}{Satellite to query from. One of "Sentinel1", "Sentinel2" etc. If none is chosen, all available results are returned.}
 
