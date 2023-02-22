@@ -85,14 +85,13 @@ getScenes <-
       gsub(" ", "+", .)
 
     url = paste0(
-      "https://finder.code-de.org/",
       if(codede)
-        paste0("resto/api/collections/")
+       paste0("https://finder.code-de.org/resto/api/collections/")
       else
-        paste0("resto-creodias/api/collections/"),
+        paste0("http://datahub.creodias.eu/resto/api/collections/"),
       if (!is.null(satellite))
         paste0(satellite,"/"),
-      "search.json?maxRecords=1000&location=all&sortParam=startDate&sortOrder=descending&status=all&dataset=ESA-DATASET",
+      "search.json?maxRecords=1000",
       if (!is.null(orbitDirection))
         paste0("&orbitDirection=", orbitDirection),
       if (!is.null(startDate))
@@ -140,7 +139,12 @@ getScenes <-
           footprint = wkt
         ) %>%
       tidyr::separate(date, c("date", NA), sep = "T") %>%
-      dplyr::mutate(date = as.Date(date)) %>%
+      dplyr::mutate(date = as.Date(date),
+                    orbitDirection = tolower(orbitDirection),
+                    productType = dplyr::case_when(
+                      productType == "IW_SLC__1S" ~ "SLC",
+                      T ~ productType
+                    )) %>%
       dplyr::arrange(date) %>%
       sf::st_as_sf(wkt = "footprint") %>%
       sf::`st_crs<-`(sf::st_crs(4326)) %>%
